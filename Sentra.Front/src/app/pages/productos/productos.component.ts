@@ -1,25 +1,49 @@
-import { AfterViewInit, Component, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from "@angular/core";
 import { MaterialModule } from "../../shared/material.module";
+import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { ProductoService } from "../../services/producto.service";
+import { IProducto } from "../../models/producto";
 
 @Component({
   selector: "app-productos",
   standalone: true,
-  imports: [MaterialModule],
+  imports: [MaterialModule, FormsModule, MatFormFieldModule, ReactiveFormsModule],
+
   templateUrl: "./productos.component.html",
   styleUrl: "./productos.component.css",
 })
-export class ProductosComponent implements AfterViewInit {
+export class ProductosComponent implements AfterViewInit, OnInit {
+  private _productoService = inject(ProductoService);
+
+  productoLista: IProducto[] = [];
+
+  busquedaText: string = "";
+
+  toppings = new FormControl("");
+  toppingList: string[] = ["Extra cheese", "Mushroom", "Onion", "Pepperoni", "Sausage", "Tomato"];
+
   displayedColumns: string[] = ["position", "name", "weight", "symbol"];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnInit(): void {
+    this.cargarListaProductos();
+  }
+
+  cargarListaProductos() {
+    this._productoService.listarTodo().subscribe((data: IProducto[]) => {
+      this.productoLista = data;
+      console.log("🚀 ~ ProductosComponent ~ cargarListaProductos ~ this.productoLista:", this.productoLista);
+    });
   }
 }
 
