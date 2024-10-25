@@ -15,5 +15,9 @@ export class ProductoService {
     return this._http.get<IProducto[]>(`${this.apiMock}products`);
   }
 
+  eliminar(id: number): Observable<IProducto> {
+    return this._http.delete<IProducto>(`${this.apiMock}products/${id}`)
+  }
+
   constructor() {}
 }

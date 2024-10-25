@@ -4,21 +4,31 @@ import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDialog } from "@angular/material/dialog";
+//import { MatFormFieldModule } from "@angular/material/form-field";
 import { ProductoService } from "../../services/producto.service";
 import { IProducto } from "../../models/producto";
 
 import { CurrencyPipe } from "@angular/common";
 import { category } from "../../models/catergory";
+import { ProdDetalleComponent } from "./prod-detalle/prod-detalle.component";
+
+import { MatMenuModule } from "@angular/material/menu";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { ProdEliminarComponent } from "./prod-eliminar/prod-eliminar.component";
+import { json } from "stream/consumers";
 
 @Component({
   selector: "app-productos",
   standalone: true,
-  imports: [MaterialModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, CurrencyPipe],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule, CurrencyPipe, MatMenuModule, MatButtonModule, MatTooltipModule],
   templateUrl: "./productos.component.html",
   styleUrl: "./productos.component.css",
 })
 export class ProductosComponent implements AfterViewInit, OnInit {
+  constructor(private dialog: MatDialog) {}
+
   private _productoService = inject(ProductoService);
 
   busquedaText: string = "";
@@ -26,7 +36,7 @@ export class ProductosComponent implements AfterViewInit, OnInit {
   toppings = new FormControl<string[]>([]);
   toppingList: string[] = Object.values(category);
 
-  displayedColumns: string[] = ["id", "title", "price", "category"];
+  displayedColumns: string[] = ["id", "title", "price", "category", "acciones"];
 
   dataSource = new MatTableDataSource<IProducto>();
 
@@ -66,5 +76,47 @@ export class ProductosComponent implements AfterViewInit, OnInit {
 
       return matchesText && matchesCategory;
     };
+  }
+
+  abrirModal(producto: IProducto): void {
+    this.dialog.open(ProdDetalleComponent, {
+      width: "400px",
+      data: { producto },
+    });
+  }
+
+  abrirModalEliminar(producto: IProducto): void {
+    const dialogRef = this.dialog.open(ProdEliminarComponent, {
+      width: "400px",
+      data: { producto },
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result != "") {
+        this.confirmaAccion(result);
+      }
+    });
+  }
+
+  //Método para controlar el DataSource ya que estoy trabajando con la BD en memoria en vez de agregar, modificar o eliminar directamente en los métodos del Product.Service
+  confirmaAccion(result: string) {
+    let accion: string = result.split("|")[0];
+    let producto: IProducto = JSON.parse(result.split("|")[1]);
+
+    switch (accion) {
+      case "deleted":
+        const index = this.dataSource.data.findIndex((prod) => (prod.id === producto.id));
+        if (index !== -1) {
+          this.dataSource.data.splice(index, 1);
+          this.dataSource.data = [...this.dataSource.data];
+        }
+        break;
+      case "updated":
+        break;
+
+      default:
+        break;
+    }
   }
 }

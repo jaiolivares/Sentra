@@ -16,6 +16,10 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 
 import { MatSelectModule } from "@angular/material/select";
 
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatCardModule } from "@angular/material/card";
+import { MatChipsModule } from "@angular/material/chips";
+
 // import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 // import { MatTableDataSource } from "@angular/material/table";
 
@@ -23,7 +27,22 @@ import { MatSelectModule } from "@angular/material/select";
   declarations: [],
   //   imports: [CommonModule],
 
-  exports: [MatToolbarModule, MatSidenavModule, MatButtonModule, MatIconModule, MatDividerModule, MatListModule, MatTableModule, MatFormFieldModule, MatInputModule, MatPaginatorModule, MatSelectModule],
+  exports: [
+    MatToolbarModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatCardModule,
+    MatChipsModule,
+    MatProgressBarModule,
+  ],
   //   providers: [{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: "dynamic", appearance: "outline" } }],
 })
 export class MaterialModule {}

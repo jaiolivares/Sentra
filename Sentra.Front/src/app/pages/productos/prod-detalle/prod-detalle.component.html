@@ -1,1 +1,11 @@
-<p>prod-detalle works!</p>
+<h1 mat-dialog-title>Detalle del Producto</h1>
+<div mat-dialog-content>
+  <p><strong>ID:</strong> {{ data.producto.id }}</p>
+  <p><strong>Título:</strong> {{ data.producto.title }}</p>
+  <p><strong>Precio:</strong> {{ data.producto.price }}</p>
+  <p><strong>Categoría:</strong> {{ data.producto.category }}</p>
+  <!-- Añadir campos adicionales aquí si deseas -->
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onClose()">Cerrar</button>
+</div>
