@@ -8,26 +8,27 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { ProductoService } from "../../services/producto.service";
 import { IProducto } from "../../models/producto";
 
+import { CurrencyPipe } from "@angular/common";
+import { category } from "../../models/catergory";
+
 @Component({
   selector: "app-productos",
   standalone: true,
-  imports: [MaterialModule, FormsModule, MatFormFieldModule, ReactiveFormsModule],
-
+  imports: [MaterialModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, CurrencyPipe],
   templateUrl: "./productos.component.html",
   styleUrl: "./productos.component.css",
 })
 export class ProductosComponent implements AfterViewInit, OnInit {
   private _productoService = inject(ProductoService);
 
-  productoLista: IProducto[] = [];
-
   busquedaText: string = "";
 
-  toppings = new FormControl("");
-  toppingList: string[] = ["Extra cheese", "Mushroom", "Onion", "Pepperoni", "Sausage", "Tomato"];
+  toppings = new FormControl<string[]>([]);
+  toppingList: string[] = Object.values(category);
 
-  displayedColumns: string[] = ["position", "name", "weight", "symbol"];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ["id", "title", "price", "category"];
+
+  dataSource = new MatTableDataSource<IProducto>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -37,42 +38,33 @@ export class ProductosComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.cargarListaProductos();
+    this.dataSource.filterPredicate = this.createFilter();
+
+    this.toppings.valueChanges.subscribe(() => this.applyFilter());
   }
 
   cargarListaProductos() {
     this._productoService.listarTodo().subscribe((data: IProducto[]) => {
-      this.productoLista = data;
-      console.log("🚀 ~ ProductosComponent ~ cargarListaProductos ~ this.productoLista:", this.productoLista);
+      this.dataSource.data = data;
     });
   }
-}
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+  applyFilter() {
+    const filterText = this.busquedaText.trim().toLowerCase();
+    const filterCategories = this.toppings.value || [];
+    this.dataSource.filter = JSON.stringify({ filterText, filterCategories });
+  }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: "Hydrogen", weight: 1.0079, symbol: "H" },
-  { position: 2, name: "Helium", weight: 4.0026, symbol: "He" },
-  { position: 3, name: "Lithium", weight: 6.941, symbol: "Li" },
-  { position: 4, name: "Beryllium", weight: 9.0122, symbol: "Be" },
-  { position: 5, name: "Boron", weight: 10.811, symbol: "B" },
-  { position: 6, name: "Carbon", weight: 12.0107, symbol: "C" },
-  { position: 7, name: "Nitrogen", weight: 14.0067, symbol: "N" },
-  { position: 8, name: "Oxygen", weight: 15.9994, symbol: "O" },
-  { position: 9, name: "Fluorine", weight: 18.9984, symbol: "F" },
-  { position: 10, name: "Neon", weight: 20.1797, symbol: "Ne" },
-  { position: 11, name: "Sodium", weight: 22.9897, symbol: "Na" },
-  { position: 12, name: "Magnesium", weight: 24.305, symbol: "Mg" },
-  { position: 13, name: "Aluminum", weight: 26.9815, symbol: "Al" },
-  { position: 14, name: "Silicon", weight: 28.0855, symbol: "Si" },
-  { position: 15, name: "Phosphorus", weight: 30.9738, symbol: "P" },
-  { position: 16, name: "Sulfur", weight: 32.065, symbol: "S" },
-  { position: 17, name: "Chlorine", weight: 35.453, symbol: "Cl" },
-  { position: 18, name: "Argon", weight: 39.948, symbol: "Ar" },
-  { position: 19, name: "Potassium", weight: 39.0983, symbol: "K" },
-  { position: 20, name: "Calcium", weight: 40.078, symbol: "Ca" },
-];
+  createFilter(): (producto: IProducto, filter: string) => boolean {
+    return (producto: IProducto, filter: string): boolean => {
+      const { filterText, filterCategories } = JSON.parse(filter);
+
+      const matchesText =
+        producto.id.toString().toLowerCase().includes(filterText) || producto.title.toLowerCase().includes(filterText) || producto.price.toString().toLowerCase().includes(filterText) || producto.category.toLowerCase().includes(filterText);
+
+      const matchesCategory = filterCategories.length === 0 || filterCategories.includes(producto.category);
+
+      return matchesText && matchesCategory;
+    };
+  }
+}

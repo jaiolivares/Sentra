@@ -1,4 +1,4 @@
-import { Category } from "./Catergory";
+import { category } from "./catergory";
 import { IRating } from "./rating";
 
 export interface IProducto {
@@ -6,7 +6,7 @@ export interface IProducto {
   title: string;
   price: number;
   description: string;
-  category: Category;
+  category: category;
   image: string;
   rating: IRating;
 }
