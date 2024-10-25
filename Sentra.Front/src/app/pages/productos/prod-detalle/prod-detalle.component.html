@@ -1,11 +1,25 @@
-<h1 mat-dialog-title>Detalle del Producto</h1>
+<!-- <h1 mat-dialog-title>Detalle del Producto</h1>
 <div mat-dialog-content>
   <p><strong>ID:</strong> {{ data.producto.id }}</p>
   <p><strong>Título:</strong> {{ data.producto.title }}</p>
   <p><strong>Precio:</strong> {{ data.producto.price }}</p>
   <p><strong>Categoría:</strong> {{ data.producto.category }}</p>
-  <!-- Añadir campos adicionales aquí si deseas -->
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onClose()">Cerrar</button>
+</div> -->
+
+<div class="container">
+  <mat-card class="example-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>{{ dataProducto.producto.title }}</mat-card-title>
+        <mat-card-subtitle>{{ dataProducto.producto.category }} {{dataProducto.producto.price | currency}}</mat-card-subtitle>
+        <img mat-card-xl-image src="{{ dataProducto.producto.image }}" />
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      {{ dataProducto.producto.description }}
+    </mat-card-content>
+  </mat-card>
 </div>

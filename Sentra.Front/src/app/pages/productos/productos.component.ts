@@ -80,20 +80,20 @@ export class ProductosComponent implements AfterViewInit, OnInit {
 
   abrirModal(producto: IProducto): void {
     this.dialog.open(ProdDetalleComponent, {
-      width: "400px",
+      width: "600px",
       data: { producto },
     });
   }
 
   abrirModalEliminar(producto: IProducto): void {
     const dialogRef = this.dialog.open(ProdEliminarComponent, {
-      width: "400px",
+      width: "600px",
       data: { producto },
       disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result != "") {
+      if (result != undefined) {
         this.confirmaAccion(result);
       }
     });
@@ -106,7 +106,7 @@ export class ProductosComponent implements AfterViewInit, OnInit {
 
     switch (accion) {
       case "deleted":
-        const index = this.dataSource.data.findIndex((prod) => (prod.id === producto.id));
+        const index = this.dataSource.data.findIndex((prod) => prod.id === producto.id);
         if (index !== -1) {
           this.dataSource.data.splice(index, 1);
           this.dataSource.data = [...this.dataSource.data];
