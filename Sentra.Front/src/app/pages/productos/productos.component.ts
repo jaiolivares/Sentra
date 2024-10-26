@@ -1,31 +1,24 @@
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from "@angular/core";
-import { MaterialModule } from "../../shared/material.module";
+import { AfterViewInit, Component, OnInit, ViewChild, inject } from "@angular/core";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatDialog } from "@angular/material/dialog";
-//import { MatFormFieldModule } from "@angular/material/form-field";
-import { ProductoService } from "../../services/producto.service";
-import { IProducto } from "../../models/producto";
-
 import { CurrencyPipe } from "@angular/common";
-import { category } from "../../models/catergory";
-import { ProdDetalleComponent } from "./prod-detalle/prod-detalle.component";
-
-import { MatMenuModule } from "@angular/material/menu";
-import { MatButtonModule } from "@angular/material/button";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { ProdEliminarComponent } from "./prod-eliminar/prod-eliminar.component";
+import { IProducto } from "../../models/producto";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator, MatPaginatorIntl } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { MaterialModule } from "../../shared/material.module";
 import { ProdCrearComponent } from "./prod-crear/prod-crear.component";
+import { ProdDetalleComponent } from "./prod-detalle/prod-detalle.component";
+import { ProdEliminarComponent } from "./prod-eliminar/prod-eliminar.component";
 import { ProdModificarComponent } from "./prod-modificar/prod-modificar.component";
-
-import { MatSort } from "@angular/material/sort"; // Importa MatSort
+import { ProductoService } from "../../services/producto.service";
+import { category } from "../../models/catergory";
 
 @Component({
   selector: "app-productos",
   standalone: true,
-  imports: [MaterialModule, FormsModule, ReactiveFormsModule, CurrencyPipe, MatMenuModule, MatButtonModule, MatTooltipModule],
+  imports: [MaterialModule, FormsModule, ReactiveFormsModule, CurrencyPipe],
   templateUrl: "./productos.component.html",
   styleUrl: "./productos.component.css",
 })
@@ -34,36 +27,27 @@ export class ProductosComponent implements AfterViewInit, OnInit {
 
   private _productoService = inject(ProductoService);
 
-  busquedaText: string = "";
+  categorias = new FormControl<string[]>([]);
+  categoriasLista: string[] = Object.values(category);
 
-  toppings = new FormControl<string[]>([]);
-  toppingList: string[] = Object.values(category);
-
-  displayedColumns: string[] = ["id", "title", "price", "category", "acciones"];
+  columnas: string[] = ["id", "title", "price", "category", "acciones"];
 
   dataSource = new MatTableDataSource<IProducto>();
+  busquedaText: string = "";
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginador!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
 
   ngOnInit(): void {
     this.cargarListaProductos();
-    this.dataSource.filterPredicate = this.createFilter();
-
-    this.toppings.valueChanges.subscribe(() => this.applyFilter());
+    this.dataSource.filterPredicate = this.creaFiltros();
+    this.categorias.valueChanges.subscribe(() => this.aplicarFiltros());
   }
 
-  // cargarListaProductos() {
-  //   this._productoService.listarTodo().subscribe((data: IProducto[]) => {
-  //     this.dataSource.data = data;
-  //     this.dataSource.sort = this.sort;
-  //   });
-  // }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginador;
+    this.dataSource.sort = this.sort;
+  }
 
   cargarListaProductos() {
     this._productoService.listarTodo().subscribe((data: IProducto[]) => {
@@ -74,23 +58,23 @@ export class ProductosComponent implements AfterViewInit, OnInit {
     });
   }
 
-  applyFilter() {
-    const filterText = this.busquedaText.trim().toLowerCase();
-    const filterCategories = this.toppings.value || [];
-    this.dataSource.filter = JSON.stringify({ filterText, filterCategories });
-  }
-
-  createFilter(): (producto: IProducto, filter: string) => boolean {
-    return (producto: IProducto, filter: string): boolean => {
-      const { filterText, filterCategories } = JSON.parse(filter);
+  creaFiltros(): (producto: IProducto, filtro: string) => boolean {
+    return (producto: IProducto, filtro: string): boolean => {
+      const { filtroText, filtroCategorias } = JSON.parse(filtro);
 
       const matchesText =
-        producto.id.toString().toLowerCase().includes(filterText) || producto.title.toLowerCase().includes(filterText) || producto.price.toString().toLowerCase().includes(filterText) || producto.category.toLowerCase().includes(filterText);
+        producto.id.toString().toLowerCase().includes(filtroText) || producto.title.toLowerCase().includes(filtroText) || producto.price.toString().toLowerCase().includes(filtroText) || producto.category.toLowerCase().includes(filtroText);
 
-      const matchesCategory = filterCategories.length === 0 || filterCategories.includes(producto.category);
+      const matchesCategoria = filtroCategorias.length === 0 || filtroCategorias.includes(producto.category);
 
-      return matchesText && matchesCategory;
+      return matchesText && matchesCategoria;
     };
+  }
+
+  aplicarFiltros() {
+    const filtroText = this.busquedaText.trim().toLowerCase();
+    const filtroCategorias = this.categorias.value || [];
+    this.dataSource.filter = JSON.stringify({ filtroText, filtroCategorias });
   }
 
   abrirModalNuevo(): void {
@@ -173,9 +157,7 @@ export class ProductosComponent implements AfterViewInit, OnInit {
             prod.category = producto.category;
           }
         });
-
         this.dataSource.data = [...this.dataSource.data];
-
         break;
     }
   }

@@ -21,6 +21,9 @@ import { MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
 
 import { MatSortModule } from "@angular/material/sort";
+import { MatTooltipModule } from "@angular/material/tooltip";
+
+import { MatMenuModule } from "@angular/material/menu";
 
 // import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 // import { MatTableDataSource } from "@angular/material/table";
@@ -45,6 +48,8 @@ import { MatSortModule } from "@angular/material/sort";
     MatChipsModule,
     MatProgressBarModule,
     MatSortModule,
+    MatTooltipModule,
+    MatMenuModule,
   ],
   //   providers: [{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: "dynamic", appearance: "outline" } }],
 })
