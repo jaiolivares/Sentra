@@ -29,7 +29,8 @@ export class ProdEliminarComponent implements OnInit {
 
   aceptarEliminar(): void {
     this._productoService.eliminar(this.dataProducto.producto.id).subscribe((data: IProducto) => {
-      this.dialogRef.close(`deleted|${JSON.stringify(this.dataProducto.producto)}`);
+      console.log("Producto eliminado", data);
+      this.dialogRef.close(`deleted|${JSON.stringify(data)}`);
     });
   }
 

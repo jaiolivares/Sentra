@@ -16,7 +16,11 @@ export class ProductoService {
   }
 
   eliminar(id: number): Observable<IProducto> {
-    return this._http.delete<IProducto>(`${this.apiMock}products/${id}`)
+    return this._http.delete<IProducto>(`${this.apiMock}products/${id}`);
+  }
+
+  agregar(producto: IProducto): Observable<IProducto> {
+    return this._http.post<IProducto>(`${this.apiMock}products`, producto);
   }
 
   constructor() {}

@@ -1,0 +1,11 @@
+.container {
+  padding: 20px;
+}
+
+.input-small {
+  width: 100px;
+}
+
+.input-large {
+  width: 400px;
+}

@@ -1,5 +1,4 @@
 import { category } from "./catergory";
-import { IRating } from "./rating";
 
 export interface IProducto {
   id: number;
@@ -8,5 +7,4 @@ export interface IProducto {
   description: string;
   category: category;
   image: string;
-  rating: IRating;
 }
