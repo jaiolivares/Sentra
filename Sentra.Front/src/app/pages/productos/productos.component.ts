@@ -20,6 +20,8 @@ import { ProdEliminarComponent } from "./prod-eliminar/prod-eliminar.component";
 import { ProdCrearComponent } from "./prod-crear/prod-crear.component";
 import { ProdModificarComponent } from "./prod-modificar/prod-modificar.component";
 
+import { MatSort } from "@angular/material/sort"; // Importa MatSort
+
 @Component({
   selector: "app-productos",
   standalone: true,
@@ -42,9 +44,11 @@ export class ProductosComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource<IProducto>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   ngOnInit(): void {
@@ -54,9 +58,19 @@ export class ProductosComponent implements AfterViewInit, OnInit {
     this.toppings.valueChanges.subscribe(() => this.applyFilter());
   }
 
+  // cargarListaProductos() {
+  //   this._productoService.listarTodo().subscribe((data: IProducto[]) => {
+  //     this.dataSource.data = data;
+  //     this.dataSource.sort = this.sort;
+  //   });
+  // }
+
   cargarListaProductos() {
     this._productoService.listarTodo().subscribe((data: IProducto[]) => {
       this.dataSource.data = data;
+      setTimeout(() => {
+        this.dataSource.sort = this.sort;
+      });
     });
   }
 
@@ -162,9 +176,6 @@ export class ProductosComponent implements AfterViewInit, OnInit {
 
         this.dataSource.data = [...this.dataSource.data];
 
-        break;
-
-      default:
         break;
     }
   }

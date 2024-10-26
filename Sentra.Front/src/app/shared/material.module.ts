@@ -20,6 +20,8 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
 
+import { MatSortModule } from "@angular/material/sort";
+
 // import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 // import { MatTableDataSource } from "@angular/material/table";
 
@@ -42,6 +44,7 @@ import { MatChipsModule } from "@angular/material/chips";
     MatCardModule,
     MatChipsModule,
     MatProgressBarModule,
+    MatSortModule,
   ],
   //   providers: [{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: "dynamic", appearance: "outline" } }],
 })
