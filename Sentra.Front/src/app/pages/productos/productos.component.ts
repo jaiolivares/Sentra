@@ -4,7 +4,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CurrencyPipe } from "@angular/common";
 import { IProducto } from "../../models/producto";
 import { MatDialog } from "@angular/material/dialog";
-import { MatPaginator, MatPaginatorIntl } from "@angular/material/paginator";
+import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { MaterialModule } from "../../shared/material.module";
@@ -23,8 +23,6 @@ import { category } from "../../models/catergory";
   styleUrl: "./productos.component.css",
 })
 export class ProductosComponent implements AfterViewInit, OnInit {
-  constructor(private dialog: MatDialog) {}
-
   private _productoService = inject(ProductoService);
 
   categorias = new FormControl<string[]>([]);
@@ -37,6 +35,8 @@ export class ProductosComponent implements AfterViewInit, OnInit {
 
   @ViewChild(MatPaginator) paginador!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.cargarListaProductos();
@@ -81,6 +81,7 @@ export class ProductosComponent implements AfterViewInit, OnInit {
     const dialogRef = this.dialog.open(ProdCrearComponent, {
       width: "800px",
       maxWidth: "800px",
+      maxHeight: "90vh",
       data: { ultimoId: this.dataSource.data.reduce((a, b) => (a.id > b.id ? a : b)).id },
       disableClose: true,
     });
@@ -103,6 +104,7 @@ export class ProductosComponent implements AfterViewInit, OnInit {
     const dialogRef = this.dialog.open(ProdModificarComponent, {
       width: "800px",
       maxWidth: "800px",
+      maxHeight: "90vh",
       data: { producto },
       disableClose: true,
     });
