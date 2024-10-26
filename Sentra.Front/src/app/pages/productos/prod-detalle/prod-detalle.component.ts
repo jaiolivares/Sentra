@@ -4,7 +4,6 @@ import { IProducto } from "../../../models/producto";
 import { MaterialModule } from "../../../shared/material.module";
 import { CurrencyPipe } from "@angular/common";
 
-
 @Component({
   selector: "app-prod-detalle",
   standalone: true,
@@ -18,8 +17,4 @@ export class ProdDetalleComponent {
     @Inject(MAT_DIALOG_DATA)
     public dataProducto: { producto: IProducto }
   ) {}
-
-  cancelar(): void {
-    this.dialogRef.close();
-  }
 }

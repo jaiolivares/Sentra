@@ -2,10 +2,11 @@
     padding: 20px;
 }
 
-.example-card {
-  max-width: 600px;
+mat-card-subtitle {
+  margin-top: 20px;
 }
 
-.example-card-footer {
-  padding: 16px;
+img {
+  width: 250px !important;
+  height: 250px !important;
 }
