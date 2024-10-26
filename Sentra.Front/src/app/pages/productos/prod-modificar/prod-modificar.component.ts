@@ -16,12 +16,11 @@ import { category } from "../../../models/catergory";
   styleUrl: "./prod-modificar.component.css",
 })
 export class ProdModificarComponent {
-  productForm: FormGroup;
-
   private _productoService = inject(ProductoService);
 
-  toppings = new FormControl<string[]>([]);
-  toppingList: string[] = Object.values(category);
+  categorias = new FormControl<string[]>([]);
+  categoriaList: string[] = Object.values(category);
+  productForm: FormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<ProdDetalleComponent>,
@@ -40,11 +39,6 @@ export class ProdModificarComponent {
 
   onSubmit() {
     if (this.productForm.valid) {
-      const formattedProduct = {
-        ...this.productForm.value,
-        price: parseFloat(this.productForm.value.price).toFixed(2), // Formato de precio con dos decimales
-      };
-
       const producto: IProducto = {
         id: this.dataProducto.producto.id,
         title: this.productForm.get("title")?.value,
@@ -62,6 +56,6 @@ export class ProdModificarComponent {
   }
 
   cancelar(): void {
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 }

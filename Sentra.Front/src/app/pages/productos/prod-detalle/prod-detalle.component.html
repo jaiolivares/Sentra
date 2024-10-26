@@ -3,7 +3,8 @@
     <mat-card-header>
       <mat-card-title-group>
         <mat-card-title>{{ dataProducto.producto.title }}</mat-card-title>
-        <mat-card-subtitle>{{ dataProducto.producto.category }} {{ dataProducto.producto.price | currency }}</mat-card-subtitle>
+        <mat-card-subtitle>Categoría: {{ dataProducto.producto.category }}</mat-card-subtitle>
+        <mat-card-subtitle>Precio: {{ dataProducto.producto.price | currency }}</mat-card-subtitle>
         <img mat-card-xl-image src="{{ dataProducto.producto.image }}" />
       </mat-card-title-group>
     </mat-card-header>

@@ -13,9 +13,9 @@ import { ProductoService } from "../../../services/producto.service";
   styleUrl: "./prod-eliminar.component.css",
 })
 export class ProdEliminarComponent implements OnInit {
-  titulo: string = "";
-
   private _productoService = inject(ProductoService);
+
+  titulo: string = "";
 
   constructor(
     public dialogRef: MatDialogRef<ProdDetalleComponent>,

@@ -1,43 +1,42 @@
 <div class="container">
-  <div class="container">
-    <h2>Modificar Producto</h2>
-    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      <mat-form-field class="input-large" appearance="fill">
-        <mat-label>Título</mat-label>
-        <input matInput formControlName="title" placeholder="Ej. White Gold Plated Princess" />
-      </mat-form-field>
+  <h2>Modificar Producto</h2>
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="input-large" appearance="fill">
+      <mat-label>Título</mat-label>
+      <input matInput formControlName="title" placeholder="Ej. Producto 1234" />
+    </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Precio</mat-label>
-        <input matInput formControlName="price" type="number" placeholder="Ej. 9.99" />
-      </mat-form-field>
+    <mat-form-field class="input-small" appearance="fill">
+      <mat-label>Precio</mat-label>
+      <input matInput formControlName="price" type="number" placeholder="Ej. 9.99" />
+    </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Descripción</mat-label>
-        <textarea matInput formControlName="description" placeholder="Descripción del producto"></textarea>
-      </mat-form-field>
+    <mat-form-field class="input-small" appearance="fill">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="category">
+        @for (categoria of categoriaList; track categoria) {
+        <mat-option [value]="categoria">{{ categoria }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Categoría</mat-label>
-        <mat-select formControlName="category">
-          @for (topping of toppingList; track topping) {
-          <mat-option [value]="topping">{{ topping }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field class="input-large" appearance="fill">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="description" placeholder="Descripción del producto"></textarea>
+    </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Imagen URL</mat-label>
-        <input matInput formControlName="image" placeholder="URL de la imagen" />
-      </mat-form-field>
+    <mat-form-field class="input-large" appearance="fill">
+      <mat-label>Imagen URL</mat-label>
+      <input matInput formControlName="image" placeholder="URL de la imagen" />
+    </mat-form-field>
 
-      <div class="image-preview" *ngIf="productForm.get('image')?.value">
-        <img [src]="productForm.get('image')?.value" alt="Vista previa de imagen" />
-      </div>
+    <div *ngIf="productForm.get('image')?.value">
+      <img [src]="productForm.get('image')?.value" alt="Vista previa de imagen" />
+    </div>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="!productForm.valid">Aceptar</button>
-      <!-- <button mat-raised-button color="primary" type="submit" [disabled]="!productForm.valid">Cancekar</button> -->
-      <button mat-raised-button color="primary" (click)="cancelar()">Cancekar</button>
-    </form>
-  </div>
+    <div class="d-flex">
+      <button mat-stroked-button (click)="cancelar()">Cancelar<mat-icon>arrow_back</mat-icon></button>
+      <button mat-flat-button matTooltip="Confirmar la modificación" type="submit" [disabled]="!productForm.valid">Aceptar<mat-icon>check</mat-icon></button>
+    </div>
+  </form>
 </div>

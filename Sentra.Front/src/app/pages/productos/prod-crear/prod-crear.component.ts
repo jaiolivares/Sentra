@@ -18,12 +18,11 @@ import { IProducto } from "../../../models/producto";
   styleUrl: "./prod-crear.component.css",
 })
 export class ProdCrearComponent {
-  productForm: FormGroup;
-
   private _productoService = inject(ProductoService);
 
-  toppings = new FormControl<string[]>([]);
-  toppingList: string[] = Object.values(category);
+  categorias = new FormControl<string[]>([]);
+  categoriaList: string[] = Object.values(category);
+  productForm: FormGroup;
 
   constructor(
     public dialogRef: MatDialogRef<ProdDetalleComponent>,
@@ -36,17 +35,12 @@ export class ProdCrearComponent {
       price: ["", [Validators.required, Validators.min(0)]],
       description: ["", Validators.required],
       category: ["", Validators.required],
-      image: ["", Validators.required],
+      image: ["https://www.sentra.cl/assets/img/logo-sentra.png", Validators.required],
     });
   }
 
   onSubmit() {
     if (this.productForm.valid) {
-      const formattedProduct = {
-        ...this.productForm.value,
-        price: parseFloat(this.productForm.value.price).toFixed(2), // Formato de precio con dos decimales
-      };
-
       const producto: IProducto = {
         id: this.dataProducto.ultimoId + 1,
         title: this.productForm.get("title")?.value,
@@ -62,5 +56,9 @@ export class ProdCrearComponent {
         this.dialogRef.close(`created|${JSON.stringify(data)}`);
       });
     }
+  }
+
+  cancelar(): void {
+    this.dialogRef.close();
   }
 }

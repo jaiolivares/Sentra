@@ -1,11 +1,17 @@
 .container {
-    padding: 20px;
+  padding: 20px;
 }
 
-.example-card {
-  max-width: 400px;
+mat-card-header {
+  margin-block: 10px;
 }
 
-.example-card-footer {
-  padding: 16px;
+mat-card-content {
+  margin-block: 20px;
+}
+
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
 }
