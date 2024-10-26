@@ -23,5 +23,9 @@ export class ProductoService {
     return this._http.post<IProducto>(`${this.apiMock}products`, producto);
   }
 
+  modificar(producto: IProducto): Observable<IProducto> {
+    return this._http.put<IProducto>(`${this.apiMock}products/${producto.id}`, producto);
+  }
+
   constructor() {}
 }

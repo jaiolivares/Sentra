@@ -18,6 +18,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ProdEliminarComponent } from "./prod-eliminar/prod-eliminar.component";
 import { ProdCrearComponent } from "./prod-crear/prod-crear.component";
+import { ProdModificarComponent } from "./prod-modificar/prod-modificar.component";
 
 @Component({
   selector: "app-productos",
@@ -83,6 +84,7 @@ export class ProductosComponent implements AfterViewInit, OnInit {
       width: "800px",
       maxWidth: "800px",
       data: { ultimoId: this.dataSource.data.reduce((a, b) => (a.id > b.id ? a : b)).id },
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -99,7 +101,20 @@ export class ProductosComponent implements AfterViewInit, OnInit {
     });
   }
 
-  abrirModalModificar(producto: IProducto): void {}
+  abrirModalModificar(producto: IProducto): void {
+    const dialogRef = this.dialog.open(ProdModificarComponent, {
+      width: "800px",
+      maxWidth: "800px",
+      data: { producto },
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result != undefined) {
+        this.confirmaAccion(result);
+      }
+    });
+  }
 
   abrirModalEliminar(producto: IProducto): void {
     const dialogRef = this.dialog.open(ProdEliminarComponent, {
@@ -132,14 +147,21 @@ export class ProductosComponent implements AfterViewInit, OnInit {
       case "created":
         this.dataSource.data.push(producto);
         this.dataSource.data = [...this.dataSource.data];
-        // const index = this.dataSource.data.findIndex((prod) => prod.id === producto.id);
-        // if (index !== -1) {
-        //   this.dataSource.data.splice(index, 1);
-        //   this.dataSource.data = [...this.dataSource.data];
-        // }
         break;
 
       case "updated":
+        this.dataSource.data.map((prod) => {
+          if (prod.id === producto.id) {
+            prod.title = producto.title;
+            prod.price = producto.price;
+            prod.description = producto.description;
+            prod.image = producto.image;
+            prod.category = producto.category;
+          }
+        });
+
+        this.dataSource.data = [...this.dataSource.data];
+
         break;
 
       default:
